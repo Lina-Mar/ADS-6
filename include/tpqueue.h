@@ -42,7 +42,6 @@ public:
       tail = newNode;
     }
   }
-
   T pop() {
     if (!head) {
       throw std::runtime_error("Очередь пуста!");
