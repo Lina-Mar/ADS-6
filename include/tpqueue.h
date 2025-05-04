@@ -6,63 +6,63 @@
 
 template<typename T>
 class TPQueue {
-  private:
-    struct Node {
-    T data;
-    Node* next;
-    explicit Node(T data) : data(data), next(nullptr) {}
-    };
-    Node* head;
-    Node* tail;
+ private:
+  struct Node {
+  T data;
+  Node* next;
+  explicit Node(T data) : data(data), next(nullptr) {}
+  };
+  Node* head;
+  Node* tail;
 
-  public:
+ public:
     TPQueue() : head(nullptr), tail(nullptr) {}
     ~TPQueue() {
-      while (head) {
-        Node* temp = head;
-        head = head->next;
-        delete temp;
-      }
+        while (head) {
+            Node* temp = head;
+            head = head->next;
+            delete temp;
+        }
     }
+
     void push(T item) {
-      Node* newNode = new Node(item);
-      if (!head || item.prior > head->data.prior) {
-        newNode->next = head;
-        head = newNode;
-        if (!tail) tail = head;
-        return;
-      }
-      Node* current = head;
-      while (current->next && current->next->data.prior >= item.prior) {
-        current = current->next;
-      }
-      newNode->next = current->next;
-      current->next = newNode;
-      if (!newNode->next) {
-        tail = newNode;
-      }
+        Node* newNode = new Node(item);
+        if (!head || item.prior > head->data.prior) {
+            newNode->next = head;
+            head = newNode;
+            if (!tail) tail = head;
+            return;
+        }
+        Node* current = head;
+        while (current->next && current->next->data.prior >= item.prior) {
+            current = current->next;
+        }
+        newNode->next = current->next;
+        current->next = newNode;
+        if (!newNode->next) {
+            tail = newNode;
+        }
     }
     T pop() {
-      if (!head) {
-        throw std::runtime_error("Очередь пуста!");
-      }
-      Node* temp = head;
-      T result = temp->data;
-      head = head->next;
-      if (!head) {
-        tail = nullptr;
-      }
-      delete temp;
-      return result;
+        if (!head) {
+            throw std::runtime_error("Очередь пуста!");
+        }
+        Node* temp = head;
+        T result = temp->data;
+        head = head->next;
+        if (!head) {
+            tail = nullptr;
+        }
+        delete temp;
+        return result;
     }
     bool isEmpty() const {
-      return head == nullptr;
+        return head == nullptr;
     }
-  };
-
-  struct SYM {
+};
+struct SYM {
   char ch;
-int prior;
+  int prior;
 };
 
 #endif  // INCLUDE_TPQUEUE_H_
