@@ -49,13 +49,13 @@ void TPQueue<T>::push(const T& item) {
         size++;
         return;
     }
-    Node* current = head;
-  while (current->next != nullptr 
-    && current->next->data.prior >= item.prior) {
+  Node* current = head;
+  while (current->next != nullptr && 
+         current->next->data.prior >= item.prior) {
     current = current->next;
-    }
-    newNode->next = current->next;
-    current->next = newNode;
+  }
+  newNode->next = current->next;
+  current->next = newNode;
 
     if (newNode->next == nullptr) {
       tail = newNode;
