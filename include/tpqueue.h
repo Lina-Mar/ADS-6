@@ -1,68 +1,85 @@
 // Copyright 2022 NNTU-CS
 #ifndef INCLUDE_TPQUEUE_H_
 #define INCLUDE_TPQUEUE_H_
-#pragma once
-#include <stdexcept>
 
-template<typename T>
+template <typename T>
 class TPQueue {
- private:
-  struct Node {
-  T data;
-  Node* next;
-  explicit Node(T data) : data(data), next(nullptr) {}
-  };
-  Node* head;
-  Node* tail;
+private:
+    struct Node {
+        T data;
+        Node* next;
+        Node(const T& data, Node* next = nullptr) : data(data), next(next) {}
+    };
+    
+    Node* head;
+    Node* tail;
+    int size;
 
- public:
-    TPQueue() : head(nullptr), tail(nullptr) {}
-    ~TPQueue() {
-        while (head) {
-            Node* temp = head;
-            head = head->next;
-            delete temp;
-        }
+public:
+    TPQueue() : head(nullptr), tail(nullptr), size(0) {}
+    ~TPQueue();
+    
+    void push(const T& item);
+    T pop();
+    bool isEmpty() const { return size == 0; }
+    int getSize() const { return size; }
+};
+
+template <typename T>
+TPQueue<T>::~TPQueue() {
+    while (head != nullptr) {
+        Node* temp = head;
+        head = head->next;
+        delete temp;
     }
+}
 
-    void push(T item) {
-        Node* newNode = new Node(item);
-        if (!head || item.prior > head->data.prior) {
-            newNode->next = head;
-            head = newNode;
-            if (!tail) tail = head;
-            return;
-        }
-        Node* current = head;
-        while (current->next && current->next->data.prior >= item.prior) {
-            current = current->next;
-        }
-        newNode->next = current->next;
-        current->next = newNode;
-        if (!newNode->next) {
+template <typename T>
+void TPQueue<T>::push(const T& item) {
+    Node* newNode = new Node(item);
+    
+    if (head == nullptr || item.prior > head->data.prior) {
+        newNode->next = head;
+        head = newNode;
+        if (tail == nullptr) {
             tail = newNode;
         }
+        size++;
+        return;
     }
-    T pop() {
-        if (!head) {
-            throw std::runtime_error("Очередь пуста!");
-        }
-        Node* temp = head;
-        T result = temp->data;
-        head = head->next;
-        if (!head) {
-            tail = nullptr;
-        }
-        delete temp;
-        return result;
+    
+    Node* current = head;
+    while (current->next != nullptr && current->next->data.prior >= item.prior) {
+        current = current->next;
     }
-    bool isEmpty() const {
-        return head == nullptr;
+    
+    newNode->next = current->next;
+    current->next = newNode;
+
+    if (newNode->next == nullptr) {
+        tail = newNode;
     }
-};
-struct SYM {
-  char ch;
-  int prior;
-};
+    
+    size++;
+}
+
+template <typename T>
+T TPQueue<T>::pop() {
+    if (isEmpty()) {
+        throw "Queue is empty";
+    }
+    
+    Node* temp = head;
+    T data = temp->data;
+    head = head->next;
+    
+    if (head == nullptr) {
+        tail = nullptr;
+    }
+    
+    delete temp;
+    size--;
+    return data;
+}
 
 #endif  // INCLUDE_TPQUEUE_H_
