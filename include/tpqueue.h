@@ -13,7 +13,8 @@ class TPQueue {
   struct Node {
     T data;
     Node* next;
-    explicit Node(const T& data, Node* next = nullptr) : data(data), next(next) {}
+    explicit Node(const T& data, Node* next = nullptr)
+        : data(data), next(next) {}
   };
     Node* head;
     Node* tail;
@@ -39,7 +40,6 @@ TPQueue<T>::~TPQueue() {
 template <typename T>
 void TPQueue<T>::push(const T& item) {
     Node* newNode = new Node(item);
-    
     if (head == nullptr || item.prior > head->data.prior) {
       newNode->next = head;
       head = newNode;
@@ -49,9 +49,9 @@ void TPQueue<T>::push(const T& item) {
         size++;
         return;
     }
-    
     Node* current = head;
-    while (current->next != nullptr && current->next->data.prior >= item.prior) {
+    while (current->next != nullptr 
+      && current->next->data.prior >= item.prior) {
       current = current->next;
     }
     newNode->next = current->next;
@@ -60,7 +60,6 @@ void TPQueue<T>::push(const T& item) {
     if (newNode->next == nullptr) {
       tail = newNode;
     }
-    
     size++;
 }
 
@@ -72,7 +71,6 @@ T TPQueue<T>::pop() {
     Node* temp = head;
     T data = temp->data;
     head = head->next;
-    
     if (head == nullptr) {
       tail = nullptr;
     }
