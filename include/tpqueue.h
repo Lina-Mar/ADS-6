@@ -9,20 +9,20 @@ struct SYM {
 
 template <typename T>
 class TPQueue {
-private:
-    struct Node {
-        T data;
-        Node* next;
-        Node(const T& data, Node* next = nullptr) : data(data), next(next) {}
-    };
+ private:
+  struct Node {
+    T data;
+    Node* next;
+    explicit Node(const T& data, Node* next = nullptr) : data(data), next(next) {}
+  };
     
     Node* head;
     Node* tail;
     int size;
 
-public:
-    TPQueue() : head(nullptr), tail(nullptr), size(0) {}
-    ~TPQueue();
+ public:
+  TPQueue() : head(nullptr), tail(nullptr), size(0) {}
+  ~TPQueue();
     
     void push(const T& item);
     T pop();
